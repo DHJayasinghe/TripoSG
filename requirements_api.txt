@@ -1,0 +1,33 @@
+# API Service Dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+pydantic==2.5.0
+
+# Core TripoSG Dependencies
+# Note: PyTorch is installed separately in Dockerfile with CUDA 12.6 support
+diffusers
+transformers
+einops
+huggingface_hub
+opencv-python
+trimesh
+omegaconf
+scikit-image
+numpy==1.22.3
+peft
+jaxtyping
+typeguard
+# diso
+pymeshlab
+
+# Additional API dependencies
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.0
+aiofiles==23.2.1
+requests==2.31.0
+
+# Azure Blob Storage
+azure-storage-blob==12.19.0
+azure-core==1.29.5
