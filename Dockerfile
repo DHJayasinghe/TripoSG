@@ -1,28 +1,27 @@
-FROM ubuntu:24.04
+FROM python:3.10
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Install dependencies (grouped to minimize layers)
+# Install system dependencies and compatible GCC for CUDA
 RUN apt-get update && apt-get install -y \
-    software-properties-common \
-    wget \
-    curl \
     build-essential \
     ninja-build \
+    python3-dev \
+    python3-setuptools \
+    python3-wheel \
     libffi-dev \
-    libgl1 \
     libssl-dev \
-    libssl3 \
-    openssl \
+    libgl1 \
+    git \
     ca-certificates \
-    && add-apt-repository ppa:deadsnakes/ppa -y \
-    && apt-get update && apt-get install -y \
-    python3.10 \
-    python3.10-venv \
-    python3.10-distutils \
-    python3.10-dev \
-    && update-ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+    wget \
+    curl \
+    gcc-12 \
+    g++-12
+
+# Set environment variables for CUDA build compatibility
+ENV CC=gcc-12
+ENV CXX=g++-12
+ENV CUDAHOSTCXX=/usr/bin/g++-12
+ENV NVCC_FLAGS="--allow-unsupported-compiler"
 
 # Install latest pip separately (avoids Debian pip conflict)
 RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.10
