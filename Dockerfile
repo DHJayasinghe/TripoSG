@@ -35,8 +35,14 @@ ENV CUDA_HOME=/usr/local/cuda
 # Copy requirements first for caching
 COPY requirements_api.txt .
 
+
 # Install Python dependencies
 RUN python3.10 -m pip install --no-cache-dir -r requirements_api.txt
+
+# Copy and install local diso wheel, then remove it to keep the image small
+COPY diso-0.1.4-cp310-cp310-linux_x86_64.whl /tmp/
+RUN python3.10 -m pip install --no-cache-dir /tmp/diso-0.1.4-cp310-cp310-linux_x86_64.whl \
+    && rm /tmp/diso-0.1.4-cp310-cp310-linux_x86_64.whl
 
 # Install torch and torchvision for CUDA 12.8
 RUN python3.10 -m pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cu128
@@ -52,9 +58,4 @@ COPY . .
 # Expose port
 EXPOSE 8000
 
-# Copy entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-# Start the application using the entrypoint script
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python3", "start_api_simple.py"]
